@@ -41,8 +41,12 @@ module tuvx_core
     procedure :: run
     ! Returns a grid from the warehouse
     procedure :: get_grid
+    ! Returns the grid warehouse
+    procedure :: get_grid_warehouse
     ! Returns a profile from the warehouse
     procedure :: get_profile
+    ! Returns the profile warehouse
+    procedure :: get_profile_warehouse
     ! Returns an updater for use TUV-x data
     procedure, private :: get_grid_updater, get_profile_updater,              &
                           get_radiator_updater
@@ -308,6 +312,23 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  function get_grid_warehouse( this ) result( grid_warehouse )
+    ! Returns a copy of a grid from the warehouse
+
+    use musica_assert,                 only : assert_msg
+    use tuvx_grid,                     only : grid_t
+
+    class(core_t),    intent(in) :: this
+    class(grid_warehouse_t),    pointer    :: grid_warehouse
+
+    call assert_msg( 423051914, associated( this%grid_warehouse_ ),           &
+                     "Grids not available" )
+    grid_warehouse => this%grid_warehouse_
+
+  end function get_grid_warehouse
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   function get_profile( this, profile_name, units ) result( profile )
     ! Returns a copy of a profile from the warehouse
 
@@ -324,6 +345,23 @@ contains
     profile => this%profile_warehouse_%get_profile( profile_name, units )
 
   end function get_profile
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function get_profile_warehouse( this ) result( profile_warehouse )
+    ! Returns a copy of a profile from the warehouse
+
+    use musica_assert,                 only : assert_msg
+    use tuvx_profile,                  only : profile_t
+
+    class(core_t),    intent(in) :: this
+    class(profile_warehouse_t),    pointer    :: profile_warehouse
+
+    call assert_msg( 423051914, associated( this%profile_warehouse_ ),        &
+                     "Profiles not available" )
+    profile_warehouse => this%profile_warehouse_
+
+  end function get_profile_warehouse
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
